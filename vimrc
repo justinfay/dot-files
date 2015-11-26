@@ -21,6 +21,8 @@ set ai "Auto indent"
 set incsearch
 set background=dark
 set backupdir=~/tmp
+set ignorecase
+set smartcase
 
 noremap <up> <nop>
 noremap <down> <nop>
@@ -30,6 +32,9 @@ nnoremap <space> za
 vnoremap <space> zf
 
 let g:syntastic_aggregate_errors = 1
+
+let g:syntastic_python_checkers = ['flake8', 'pylint']
+let g:syntastic_php_checkers = ['php', 'phpcs', 'phpmd']
 
 func! DeleteTrailingWS()
   exe "normal mz"
@@ -43,20 +48,6 @@ augroup vimrc_autocmds
   autocmd BufEnter *.py match OverLength /\%79v.*/
   autocmd BufEnter *.sh highlight OverLength ctermbg=red guibg=#592929
   autocmd BufEnter *.sh match OverLength /\%150v.*/
-augroup END
-
-func! MkNonExDir(file, buf)
-    if empty(getbufvar(a:buf, '&buftype')) && a:file!~#'\v^\w+\:\/'
-        let dir=fnamemodify(a:file, ':h')
-        if !isdirectory(dir)
-            call mkdir(dir, 'p')
-        endif
-    endif
-endfunc
-
-augroup BWCCreateDir
-    autocmd!
-    autocmd BufWritePre * :call s:MkNonExDir(expand('<afile>'), +expand('<abuf>'))
 augroup END
 
 augroup myvimrc
